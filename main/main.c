@@ -57,25 +57,31 @@ void app_main(void)
     memcpy(peerInfo.peer_addr, broadcastAddress, 6); //copy the mac address into the peer info struct
     peerInfo.channel = 0; //use channel 0
     peerInfo.encrypt = false; //no encryption
+    peerInfo.ifidx = WIFI_IF_STA;
 
     while (esp_now_add_peer(&peerInfo) != ESP_OK){ //add the peer, if it fials then escape
         printf("Failed to add peer");
     }
 
 
+    wifi_mode_t current_mode;
+    esp_err_t err = esp_wifi_get_mode(&current_mode);
+    if (err == ESP_OK) {
+        printf(WIFI_MODE_STA == current_mode ? "station" : "AP");
+    }
     msgStruct packet; //make a packet to send!
 
     strcpy(packet.a, "Hi Ryan, This is the other guy"); //some text idk
     packet.b = strlen(packet.a); //length of the text, might as well send that ig
 
-    esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &packet, sizeof(packet)); //send the packet with MAC addr, the packet, and the length of that whole packet
+    esp_err_t result = esp_now_send(peerInfo.peer_addr, (uint8_t *) &packet, sizeof(packet)); //send the packet with MAC addr, the packet, and the length of that whole packet
 
     while (1) {
-        result = esp_now_send(broadcastAddress, (uint8_t *) &packet, sizeof(packet));
+        result = esp_now_send(peerInfo.peer_addr, (uint8_t *) &packet, sizeof(packet));
         if (result == ESP_OK) { //check if it sent
             printf("Sent with success\n");
         } else {
-            printf("Error sending the data: %d\n", result);
+            printf("Error sending the data: %s\n", esp_err_to_name(result));
         }
 
         vTaskDelay(1000 / portTICK_PERIOD_MS); //wait a second
