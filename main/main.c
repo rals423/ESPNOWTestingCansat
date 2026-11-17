@@ -61,7 +61,7 @@ void app_main(void)
     while (esp_now_add_peer(&peerInfo) != ESP_OK){ //add the peer, if it fials then escape
         printf("Failed to add peer");
     }
-
+/*
 
     msgStruct packet; //make a packet to send!
 
@@ -80,7 +80,7 @@ void app_main(void)
 
         vTaskDelay(1000 / portTICK_PERIOD_MS); //wait a second
     }
-
+*/
 
 
 
