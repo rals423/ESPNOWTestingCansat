@@ -53,7 +53,7 @@ void app_main(void)
 
 
     uint8_t broadcastAddress[] = {0x44, 0xBD, 0x8D, 0x76, 0xA1, 0xF0}; //MAC address of the receiver
-    esp_now_peer_info_t peerInfo; //store info about the peer
+    esp_now_peer_info_t peerInfo = {}; //store info about the peer
     memcpy(peerInfo.peer_addr, broadcastAddress, 6); //copy the mac address into the peer info struct
     peerInfo.channel = 0; //use channel 0
     peerInfo.encrypt = false; //no encryption
@@ -61,7 +61,7 @@ void app_main(void)
     while (esp_now_add_peer(&peerInfo) != ESP_OK){ //add the peer, if it fials then escape
         printf("Failed to add peer");
     }
-/*
+
 
     msgStruct packet; //make a packet to send!
 
@@ -80,7 +80,7 @@ void app_main(void)
 
         vTaskDelay(1000 / portTICK_PERIOD_MS); //wait a second
     }
-*/
+
 
 
 
