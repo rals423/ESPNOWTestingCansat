@@ -70,7 +70,7 @@ void app_main(void)
 
 
     uint8_t broadcastAddress[] = {0x44, 0xBD, 0x8D, 0x76, 0xA2, 0xF4}; //MAC address of the Transmitter
-    esp_now_peer_info_t peerInfo; //store info about the peer
+    esp_now_peer_info_t peerInfo = {}; //store info about the peer
     memcpy(peerInfo.peer_addr, broadcastAddress, 6); //copy the mac address into the peer info struct
     peerInfo.channel = 0; //use channel 0
     peerInfo.encrypt = false; //no encryption
