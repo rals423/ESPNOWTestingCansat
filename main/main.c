@@ -66,7 +66,7 @@ void app_main(void)
 
     
     //MAC:44:BD:8D:76:A1:F0 with ant
-    //MAC: 44:BD:8D:76:A2:F4 w/o ant
+    //MAC: 44:BD:8D:76:A2:F4 w/o ants
 
 
     uint8_t broadcastAddress[] = {0x44, 0xBD, 0x8D, 0x76, 0xA2, 0xF4}; //MAC address of the Transmitter
@@ -81,7 +81,7 @@ void app_main(void)
 
     esp_now_register_recv_cb(onDataRecv);
 
-    
+
 
 
 }
