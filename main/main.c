@@ -75,9 +75,8 @@ void app_main(void)
     peerInfo.channel = 0; //use channel 0
     peerInfo.encrypt = false; //no encryption
 
-    if (esp_now_add_peer(&peerInfo) != ESP_OK){ //add the peer, if it fials then escape
-        printf("Failed to add peer");
-        return;
+    while (esp_now_add_peer(&peerInfo) != ESP_OK){ //add the peer, if it fials then escape
+        printf("Failed to add peer, tring to listen on %02X:%02X:%02X:%02X:%02X:%02X\n", HostMAC[0], HostMAC[1], HostMAC[2], HostMAC[3], HostMAC[4], HostMAC[5]);
     }
 
     esp_now_register_recv_cb(onDataRecv);
