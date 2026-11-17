@@ -34,5 +34,7 @@
     "--query-driver=**",
     "--compile-commands-dir=/home/ryan/sample_project/build"
   ],
-  "idf.flashType": "UART"
+  "idf.flashType": "UART",
+  "workbench.settings.showAISearchToggle": false,
+  "chat.disableAIFeatures": true
 }

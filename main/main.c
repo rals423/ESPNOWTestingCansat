@@ -11,6 +11,21 @@
 // Define the GPIO pin for the LED (GPIO 2 is common for onboard LEDs)
 #define BLINK_GPIO 21
 
+typedef struct msgStruct {
+    char a[32];
+    int b; //length of the data
+} msgStruct;
+
+
+//Function Protoypes
+
+void getMAC(uint8_t *mac);
+void onDataRecv(const esp_now_recv_info_t *info, const uint8_t *data, int data_len);
+
+
+
+
+
 void getMAC(uint8_t *mac) {
     esp_err_t macret = esp_wifi_get_mac(WIFI_IF_STA, mac);
     if (macret == ESP_OK) {
@@ -21,10 +36,12 @@ void getMAC(uint8_t *mac) {
 
 }
 
-typedef struct msgStruct {
-    char a[32];
-    int b; //length of the data
-} msgStruct;
+void onDataRecv(const esp_now_recv_info_t *info, const uint8_t *data, int data_len) {
+    msgStruct packet; //make a packet to have the stuff copied into
+    memcpy(&packet, data, sizeof(packet)); // Copy the received data into the struct
+    printf("Received string: %s\n", packet.a);
+    printf("Received length: %d\n", packet.b);
+}
 
 void app_main(void)
 {
@@ -52,7 +69,7 @@ void app_main(void)
     //MAC: 44:BD:8D:76:A2:F4 w/o ant
 
 
-    uint8_t broadcastAddress[] = {0x44, 0xBD, 0x8D, 0x76, 0xA1, 0xF0}; //MAC address of the receiver
+    uint8_t broadcastAddress[] = {0x44, 0xBD, 0x8D, 0x76, 0xA2, 0xF4}; //MAC address of the Transmitter
     esp_now_peer_info_t peerInfo; //store info about the peer
     memcpy(peerInfo.peer_addr, broadcastAddress, 6); //copy the mac address into the peer info struct
     peerInfo.channel = 0; //use channel 0
@@ -63,25 +80,9 @@ void app_main(void)
         return;
     }
 
+    esp_now_register_recv_cb(onDataRecv);
 
-    msgStruct packet; //make a packet to send!
-
-    strcpy(packet.a, "Hi Ryan, This is the other guy"); //some text idk
-    packet.b = strlen(packet.a); //length of the text, might as well send that ig
-
-    esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &packet, sizeof(packet)); //send the packet with MAC addr, the packet, and the length of that whole packet
-
-    while (1) {
-        if (result == ESP_OK) { //check if it sent
-            printf("Sent with success\n");
-        } else {
-            printf("Error sending the data: %d\n", result);
-        }
-
-        vTaskDelay(1000 / portTICK_PERIOD_MS); //wait a second
-    }
-
-
+    
 
 
 }
