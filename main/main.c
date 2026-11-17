@@ -58,9 +58,8 @@ void app_main(void)
     peerInfo.channel = 0; //use channel 0
     peerInfo.encrypt = false; //no encryption
 
-    if (esp_now_add_peer(&peerInfo) != ESP_OK){ //add the peer, if it fials then escape
+    while (esp_now_add_peer(&peerInfo) != ESP_OK){ //add the peer, if it fials then escape
         printf("Failed to add peer");
-        return;
     }
 
 
@@ -72,6 +71,7 @@ void app_main(void)
     esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &packet, sizeof(packet)); //send the packet with MAC addr, the packet, and the length of that whole packet
 
     while (1) {
+        result = esp_now_send(broadcastAddress, (uint8_t *) &packet, sizeof(packet));
         if (result == ESP_OK) { //check if it sent
             printf("Sent with success\n");
         } else {
