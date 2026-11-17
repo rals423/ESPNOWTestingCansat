@@ -80,6 +80,7 @@ void app_main(void)
     }
 
     esp_now_register_recv_cb(onDataRecv);
+    printf("LISTENING");
 
 
 
