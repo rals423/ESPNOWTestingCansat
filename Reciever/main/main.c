@@ -74,7 +74,8 @@ void app_main(void)
     memcpy(peerInfo.peer_addr, broadcastAddress, 6); //copy the mac address into the peer info struct
     peerInfo.channel = 0; //use channel 0
     peerInfo.encrypt = false; //no encryption
-
+    peerInfo.ifidx = WIFI_IF_STA; 
+    
     while (esp_now_add_peer(&peerInfo) != ESP_OK){ //add the peer, if it fials then escape
         printf("Failed to add peer, tring to listen on %02X:%02X:%02X:%02X:%02X:%02X\n", HostMAC[0], HostMAC[1], HostMAC[2], HostMAC[3], HostMAC[4], HostMAC[5]);
     }
